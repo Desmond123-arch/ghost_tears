@@ -5,8 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Add any customizations here
+    },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'), // Ensure DaisyUI is included as a plugin
+  ],
+  daisyui: {
+    themes: ["cyberpunk"],
+  },
 }
-

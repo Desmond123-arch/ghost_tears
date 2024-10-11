@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GameForm from "../components/gameForm";
+import GameLink from "../components/game_link";
 
 const Home = () => {
   const [IsOpen, setIsOpen] = useState(false);
@@ -8,6 +9,10 @@ const Home = () => {
   const handleShowChange = (newShow: boolean) => {
     setIsOpen(newShow);
   };
+  const createGame= (category: any) => {
+    console.log("game created")
+    console.log(category)
+  }
   
   return (
     <div data-theme="cyberpunk">
@@ -27,7 +32,8 @@ const Home = () => {
         </div>
       </div>
       <div className="center w-[70%] md:w-[31%]">
-      <GameForm show={IsOpen} onShowChange={handleShowChange}/>
+      {/* <GameForm show={IsOpen} onShowChange={handleShowChange} createGame={createGame}/> */}
+      <GameLink gameInviteLink={"http://localhost:5173/game/1"}/>
       </div>
       <div className="mt-8 flex space-x-4 center top-[75%] md:top-[65%]">
         {["😱", "💀", "🎃"].map((emoji, index) => (

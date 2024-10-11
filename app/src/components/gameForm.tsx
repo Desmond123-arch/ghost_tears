@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 //[] modify to use api to request for possible categories later on
 
 interface GameFormProps {
@@ -7,27 +7,47 @@ interface GameFormProps {
   onShowChange: (newShow: boolean) => void;
 }
 interface newGameForms {
-  category: String,
-  guessTime: Number,
-  rounds: Number,
+  category: string;
+  guessTime: number;
+  rounds: number;
 }
-const GameForm: React.FC<GameFormProps> = ({ show, onShowChange }) => {
-  const [selectedCategory, SetSelectedCategory] = useState<String>("");
-  const [selectedSeconds, setselectedSeconds] = useState<Number>(3);
-  const [numOfRounds, setnumOfRounds] = useState<Number>(3);
+interface Errors {
+  [key: string]:string;
+}
 
-  const handleShow = (e: React.MouseEvent) => {
+
+const GameForm: React.FC<GameFormProps> = ({ show, onShowChange }) => {
+  const [selectedCategory, SetSelectedCategory] = useState<string>("");
+  const [selectedSeconds, setselectedSeconds] = useState<number>(3);
+  const [numOfRounds, setnumOfRounds] = useState<number>(3);
+  const [errors, setErrors] = useState<Errors>({});
+
+  const handleShow = () => {
     onShowChange(false);
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const categories: newGameForms = {
-        category: selectedCategory,
-        guessTime: selectedSeconds ,
-        rounds: numOfRounds
+    let validationErrors: { [key: string]: string } = {};
+    if (selectedCategory.length === 0) {
+      validationErrors.selectedCategory = "No category selected"
     }
-    console.log(categories);
-  }
+    if (Object.keys(validationErrors).length > 0)
+    {
+      setErrors(prev => ({
+        ...prev,
+        ...validationErrors
+      }))
+      console.log(errors);
+    }
+    else{
+      const categories: newGameForms = {
+        category: selectedCategory,
+        guessTime: selectedSeconds,
+        rounds: numOfRounds,
+      };
+
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -58,7 +78,7 @@ const GameForm: React.FC<GameFormProps> = ({ show, onShowChange }) => {
               <option value={"Marvel Heros"}>Marvel Heros</option>
               <option value={"DC Heros"}>DC Heros</option>
             </select>
-
+            {errors.selectedCategory && <p className="text-center">{errors.selectedCategory}</p>}
             <h3 className="text-center text-lg font-normal mt-3  underline underline-offset-8">
               Guess time
             </h3>
@@ -84,8 +104,8 @@ const GameForm: React.FC<GameFormProps> = ({ show, onShowChange }) => {
               />
             </div>
             <h3 className="text-center text-lg font-normal mt-3  underline underline-offset-8">
-                Number of Rounds
-              </h3>
+              Number of Rounds
+            </h3>
             <div className="flex">
               <div className="flex  gap-2 w-max mx-auto">
                 <label htmlFor="3rounds">3</label>
@@ -109,7 +129,9 @@ const GameForm: React.FC<GameFormProps> = ({ show, onShowChange }) => {
                 />
               </div>
             </div>
-            <button className="btn rounded-md" type="submit">Start</button>
+            <button className="btn rounded-md" type="submit">
+              Start
+            </button>
           </form>
         </motion.div>
       )}

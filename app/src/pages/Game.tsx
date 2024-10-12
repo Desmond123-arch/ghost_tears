@@ -22,7 +22,18 @@ const Game = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [nextButtonPressed, SetnextButtonPressed] = useState<boolean>(false);
 
+  async function EnterRoom(roomId: string) {
+    console.log('entering room')
+    await new Promise(resolve=> setTimeout(resolve, 10000))// simulating request, replace later
+  }
+
   //get enter room through api
+  useEffect(() => {
+    const enterRoom = async () => {
+      await EnterRoom('1234');
+    }
+    enterRoom();
+  }, [])
   //add a letter after a person has entered a word
   function addLetterBox(disabled: boolean) {
     setInputList([...inputList, { disabled }]);

@@ -1,34 +1,45 @@
 import React, { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { AnimatePresence, motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 
 type InputData = {
   disabled: boolean;
 };
+//Game Logic
+// send request to get the particular room after page has loaded
+
+//set a get request to be allowed access into room
+//don't forget to wait for the opponent
 
 const Game = () => {
+  const roomId = useParams().roomId;
   const [time, setTime] = useState<number>(10);
-  const [word, setWord] = useState<string[]>([]); 
+  const [word, setWord] = useState<string[]>([]);
   const [inputList, setInputList] = useState<InputData[]>([
     { disabled: false },
   ]);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [nextButtonPressed, SetnextButtonPressed] = useState<boolean>(false);
 
+  //get enter room through api
+  //add a letter after a person has entered a word
   function addLetterBox(disabled: boolean) {
     setInputList([...inputList, { disabled }]);
     SetnextButtonPressed(true);
   }
   const LetterEntered = (letter: string) => {
-    setWord([...word, letter]);
+    setWord([...word, letter]); //append words to array
     setDisabled(true);
     setTime(0);
     addLetterBox(disabled);
   };
+  //if word box is full submit for checking if word is valid
   function wordComplete() {
     setInputList(inputList.slice(word.length));
     console.log(word.join(''));
   }
+  //animation
   const variants = {
     show: {
       opacity: 1,

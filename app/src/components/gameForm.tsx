@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
+import Loading from "./Loading";
 //[] modify to use api to request for possible categories later on
 
 interface GameFormProps {
@@ -15,7 +16,6 @@ interface newGameForms {
 interface Errors {
   [key: string]: string;
 }
-
 
 
 const GameForm: React.FC<GameFormProps> = ({ show, onShowChange,  createGame}) => {
@@ -47,12 +47,13 @@ const GameForm: React.FC<GameFormProps> = ({ show, onShowChange,  createGame}) =
         rounds: numOfRounds,
       };
       setErrors({})
-      createGame(categories)
+      createGame(categories);
     }
   };
 
   return (
     <AnimatePresence>
+      {/* if we are showing the form*/}
       {show && (
         <motion.div
           className="bg-yellow-200 card rounded-xl shadow-xl border-yellow-400"
@@ -61,10 +62,15 @@ const GameForm: React.FC<GameFormProps> = ({ show, onShowChange,  createGame}) =
           exit={{ opacity: 0, y: "50%" }}
           transition={{ duration: 0.5 }}
         >
+          {/* check whether we are loading i after submission*/}
           {(loading && Object.keys(errors).length === 0) ? (
-            <p className="w-max mx-auto p-5"><span className="loading loading-spinner loading-lg text-6xl mx-auto "></span></p>
-          ) : (
+            <p className="w-max mx-auto p-5">
+              <Loading size={40}/>
+            </p>
+          ) : 
+          (
             <>
+            {/* otherwise show the form for filling*/}
               <button onClick={handleShow} className="ml-auto text-2xl px-4">
                 &times;
               </button>

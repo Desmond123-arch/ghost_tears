@@ -4,14 +4,25 @@ import GameLink from "../components/game_link";
 
 const Home = () => {
   const [IsOpen, setIsOpen] = useState(false);
+  const [gettingLink, setgettingLink] = useState(false);
   
 
   const handleShowChange = (newShow: boolean) => {
     setIsOpen(newShow);
   };
   const createGame= (category: any) => {
-    console.log("game created")
-    console.log(category)
+    // console.log("game created")
+    // console.log(category);
+    //maybe change difficuties here or something
+    startGame()
+
+  }
+  const startGame = async () => {
+    //function that gets invite link from api(room id)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setgettingLink(true);
+    setIsOpen(false);
+    return "/2"
   }
   
   return (
@@ -32,8 +43,14 @@ const Home = () => {
         </div>
       </div>
       <div className="center w-[70%] md:w-[31%]">
-      {/* <GameForm show={IsOpen} onShowChange={handleShowChange} createGame={createGame}/> */}
-      <GameLink gameInviteLink={"http://localhost:5173/game/1"}/>
+        {/** If GameForm is open hide the Game link and vice versa */}
+        {/*   */}
+        
+        {gettingLink? 
+        (<GameLink gameInviteLink={"http://localhost:5173/game/1"}/>)
+        :
+        (<GameForm show={IsOpen} onShowChange={handleShowChange} createGame={createGame}/>)
+        }
       </div>
       <div className="mt-8 flex space-x-4 center top-[75%] md:top-[65%]">
         {["😱", "💀", "🎃"].map((emoji, index) => (

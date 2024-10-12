@@ -20,8 +20,8 @@ const GameLink: React.FC<GameLinkProps> = ({gameInviteLink}) => {
     return (
         <motion.div
         className="bg-yellow-200 card rounded-xl shadow-xl border-yellow-400"
-        initial={{ opacity: 0, y: "-50%" }}
-        animate={{ opacity: 1, y: "0%" }}
+        initial={{ opacity: 0, y: "50%" }}
+        animate={{ opacity: 1, y: "-50%" }}
         exit={{ opacity: 0, y: "50%" }}
         transition={{ duration: 0.5 }}
       >

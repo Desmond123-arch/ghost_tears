@@ -51,25 +51,45 @@ const Game = () => {
       setMyTurn(true);
       setTime(10);
     });
+    socket.on("roundEnded", () => {
+      setDisabled(true);
+      setMyTurn(false);
+      setTime(-1);
+    })
     return () => {
       socket.off("letterReceived");
       socket.off("beginGame");
     };
   }, []);
   useEffect(() => {
+    if (time > 0) {
+      const interval = setInterval(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }
+  
     if (time === 0) {
       setDisabled(true);
       socket.emit("letterEntered", text);
-      return () => {
-        socket.off("letterEntered");
-      };
     }
-    const interval = setInterval(
-      () => setTime((prevTime) => prevTime - 1),
-      1000
-    );
-    return () => clearInterval(interval);
+  
+    // Explicitly stop any further updates if time is -1
+    if (time === -1) {
+      setDisabled(true);
+    }
   }, [time]);
+  
+  
+  
+
+  const handleSubmit = () => {
+    setMyTurn(false);
+    setDisabled(true); 
+    socket.emit('submit', text);
+    socket.off('submit');
+  }
 
   return (
     <div>
@@ -107,6 +127,7 @@ const Game = () => {
           className="disabled:bg-yellow-900 text-4xl font-bold text-center border rounded-xl shadow-lg py-2"
         />
       </div>
+      <button className="center top-[50%] border border-yellow-800 text-xl p-3 rounded-md" onClick={handleSubmit}>Submit</button>
     </div>
   );
 };

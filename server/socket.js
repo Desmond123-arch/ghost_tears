@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
         console.log(rooms.get((roomId)))
         if(!rooms.get(roomId)){
             socket.emit('error', {message:'Room does not exist'})
+            return
         }
         else if(rooms.get(roomId).has(socket.id)){
             console.log('User already in the room')
@@ -38,6 +39,7 @@ io.on('connection', (socket) => {
         }
         else if(rooms.get(roomId).size >= 2){
             socket.emit('error', {message: 'Room is full'})
+            return
         }
         else{
             socket.join(roomId)

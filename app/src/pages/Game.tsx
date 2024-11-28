@@ -82,6 +82,9 @@ const Game = () => {
 
         socket?.on('playerLeft', () => {
             alert('Player left the game')
+            setTime(10)
+            setDisabled(true)
+            setMyTurn(false)
             console.log('Player left the game')
         })
 

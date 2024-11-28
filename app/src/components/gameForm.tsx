@@ -33,6 +33,7 @@ const GameForm: React.FC<GameFormProps> = ({
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     setLoading(true);
     const validationErrors: { [key: string]: string } = {};
     if (selectedCategory.length === 0) {

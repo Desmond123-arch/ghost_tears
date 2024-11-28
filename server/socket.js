@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
             socket.join(roomId)
             rooms.get(roomId).add(socket.id)
             if(rooms.get(roomId).size == 2){
+                console.log('begin game')
                 const players = Array.from(rooms.get(roomId))
                 socket.to(roomId).emit('beginGame', {room: players})
                 socket.emit('beginGame', {room: players})
@@ -52,14 +53,19 @@ io.on('connection', (socket) => {
         }
     })
     //receive letter entered
-    socket.on('letterEntered', (letter) => {
+    socket.on('letterEntered', (data) => {
+        console.log(data)
+        let letter = data.letter
+        const roomId = data.roomId.roomId
+        console.log(roomId)
         console.log(letter);
         //emit the letter to users
-        socket.broadcast.emit('letterReceived', (letter))
+        socket.to(roomId).emit('letterReceived', (letter))
     })
-    socket.on('submit', (word) => {
+    socket.on('submit', (data) => {
+        const {word, roomId} = data
         console.log(word);
-        socket.emit('roundEnded');
+        socket.to(roomId).emit('roundEnded');
     })
     socket.on('disconnect', () => {
         console.log('user disconnected', socket.id)

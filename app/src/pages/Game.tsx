@@ -31,7 +31,7 @@ const Game = () => {
     const endTurn = (letter: string) => {
         if (!myTurn) return
         setTime(10)
-        socket?.emit('letterEntered', letter)
+        socket?.emit('letterEntered', { letter: letter, roomId: roomId })
         setDisabled(true)
         setMyTurn(false)
         console.log('ending turn')
@@ -74,7 +74,11 @@ const Game = () => {
             console.log(room[1])
             if (room[1] === socket.id) {
                 setTime(10)
-                socket?.emit('letterEntered', '')
+                console.log(roomId)
+                socket?.emit('letterEntered', {
+                    letter: '',
+                    roomId: { ...roomId },
+                })
                 setDisabled(true)
                 setMyTurn(false)
             }
@@ -112,7 +116,10 @@ const Game = () => {
                 setTime((prevTime) => {
                     if (prevTime <= 1 && myTurn) {
                         console.log('Time ran out, ending turn.')
-                        socket?.emit('letterEntered', text)
+                        socket?.emit('letterEntered', {
+                            letter: text,
+                            roomId: roomId,
+                        })
                         setDisabled(true)
                         setMyTurn(false)
                         setTime(10)
@@ -123,7 +130,7 @@ const Game = () => {
             }, 1000)
             return () => clearInterval(interval)
         }
-    }, [myTurn, socket, text, time])
+    }, [myTurn, roomId, socket, text, time])
 
     const handleSubmit = () => {
         setMyTurn(false)
